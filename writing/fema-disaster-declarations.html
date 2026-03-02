@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="../resources/favicon.ico"/>
+        <link rel="stylesheet" type="text/css" href="../style.css">
+        <title>The 68-Day Wait &mdash; Nikhil Ghosh</title>
+    </head>
+    <body>
+        <h1><a href="../">Nikhil Ghosh</a></h1>
+
+        <h2 class="post-title">The 68-Day Wait: Building an AI Pipeline to Fix FEMA Disaster Declarations</h2>
+        <p class="post-date">May 15, 2025</p>
+
+        <div class="post-content">
+
+<p><strong>TL;DR: FEMA disaster declarations take 45-90 days because of document processing, and the delays hit under-resourced communities hardest. I built a proof-of-concept AI pipeline that cuts processing time by 85%, drops error rates below human baselines, and shrinks the approval gap between wealthy and poor counties from ~10 points to ~2. The tech works. The hard part is getting it into government.</strong></p>
+
+<hr>
+
+<p>When Hurricane Ian hit Florida in September 2022, FEMA had a thousand personnel on the ground within 24 hours. Search and rescue was operational in 48. But completing the damage assessments and approving Individual Assistance declarations for all affected counties? <strong>68 days.</strong></p>
+
+<p>That gap&mdash;between operational response and bureaucratic resolution&mdash;is where people&rsquo;s lives fall apart. Homeowners face mounting costs with no federal support. Local governments drain emergency reserves. Economic activity flatlines. And the communities hit hardest by the disaster are often the ones least equipped to survive the wait.</p>
+
+<p>The bottleneck isn&rsquo;t funding or political will. <strong>It&rsquo;s document processing.</strong> Hundreds of pages of damage assessments, field reports, and application forms per disaster, all manually reviewed, consolidated, and routed through a multi-step approval chain. Average timeline from disaster to final IA declaration: 45-90 days, based on FEMA administrative data from 2015-2023.</p>
+
+<p>This is adapted from work I did during grad studies at Columbia (2023-2025)&mdash;a proof-of-concept AI pipeline that attacks this bottleneck directly. The speed gains were expected. The equity gains were the surprise.</p>
+
+<hr>
+
+<h2>The Inequality Nobody Talks About</h2>
+
+<p>The process is also structurally unfair.</p>
+
+<p>Well-resourced municipalities (think Miami-Dade, Houston) have dedicated emergency management departments, experienced grant writers, and institutional memory from previous disasters. They document damage comprehensively and navigate FEMA&rsquo;s requirements with practiced ease.</p>
+
+<p>Rural counties, tribal nations, and under-resourced communities? Part-time emergency managers juggling multiple roles, first-time applicants, minimal administrative support. They struggle with complex forms and face substantially longer delays&mdash;not because their need is less, but because their documentation capacity is limited.</p>
+
+<p>The result is systematic approval disparities that reflect documentation quality rather than underlying need. Historical data from 2018-2023 bears this out: minority-majority counties approved at 69.4% vs. 78.2% for white-majority counties. Rural counties at 68.9% vs. 79.8% for urban. Low-income at 71.7% vs. 81.3% for high-income. These gaps aren&rsquo;t about damage severity. <strong>They&rsquo;re about who can fill out the paperwork.</strong></p>
+
+<p>You could argue this is just how bureaucracy works&mdash;complex processes inevitably favor the sophisticated. And that&rsquo;s fair as a descriptive claim. But it&rsquo;s not acceptable as a normative one when we&rsquo;re talking about disaster relief. And it turns out AI can actually help close these gaps, not widen them.</p>
+
+<hr>
+
+<h2>Three Stages, One Pipeline</h2>
+
+<p>The pipeline has three stages, each targeting a different bottleneck.</p>
+
+<h3>Stage 1: Intelligent Form Extraction</h3>
+
+<p>FEMA Form 010-0-13 is 12 pages, 150+ fields, mixing structured data with unstructured narratives. Forms arrive as clean PDFs, scanned images, partially handwritten documents, sometimes water-damaged. Traditional OCR hits 85-90% accuracy on clean scans and degrades from there. Every form gets manual human review. Processing time: 45-60 minutes per form.</p>
+
+<p>The approach: treat the entire form as context for an LLM-based structured extraction. Feed the full form as images plus OCR text plus field schema into GPT-4-Turbo&rsquo;s 128K context window. Layer on cross-field consistency checks, required field verification, and confidence scoring to route only low-confidence extractions to human review.</p>
+
+<p>On 247 historical de-identified forms: field extraction accuracy jumped from 87.3% to <strong>96.8%</strong>. Processing time dropped from 52 minutes to <strong>3.2 minutes</strong> per form. The share of forms requiring human review fell from 100% to <strong>23%</strong>. Critical field errors dropped from 8.2% to <strong>1.4%</strong>.</p>
+
+<p>The remaining errors cluster around handwritten dollar amounts with ambiguous zeros and borderline damage classifications&mdash;addressable with field-specific fine-tuning and mandatory human verification on high-stakes fields. At FEMA&rsquo;s scale of roughly 20,000 forms annually, this translates to about $520K in direct cost savings, but the real value is time: faster processing means faster declarations.</p>
+
+<h3>Stage 2: Multimodal Damage Assessment</h3>
+
+<p>Preliminary Damage Assessments combine satellite imagery, ground-level photos (thousands per disaster), written field assessments, sensor data, and social media reports. The current process is manual photo review with subjective severity classifications that vary by assessor. It takes 40+ hours per affected county and consistency across teams is mediocre at best: human inter-rater reliability sits around 87.4%.</p>
+
+<p>The system fuses these heterogeneous sources through a cross-attention transformer architecture: building detection via fine-tuned YOLOv8, damage classification on a 5-level severity scale, change detection on before/after image pairs, and cross-source consistency checking that flags when satellite analysis contradicts ground photos.</p>
+
+<p>On Hurricane Ian data (8,400 buildings across 67 counties): classification accuracy hit <strong>91.7%</strong> versus 89.2% human inter-rater agreement. Consistency on repeated assessments: <strong>99.1% vs. 87.4%</strong>. Processing time per county: <strong>2.1 hours vs. 42 hours</strong>. The false negative rate (missing real damage) dropped from 11.3% to 6.1%.</p>
+
+<p>The system still struggles with flood damage extent (inferring water levels from imagery is hard), interior damage with limited photographic evidence, and vegetation damage quantification. But the equity implication is significant: standardized assessment reduces the variation that comes from which assessor you happen to get and how well your local officials documented things.</p>
+
+<h3>Stage 3: Agentic Application Assistance</h3>
+
+<p>Stage 3 has the most direct equity impact. The system acts as an AI agent that guides applicants through the declaration process&mdash;parsing FEMA requirements, generating disaster-specific checklists, running real-time completeness checks, identifying gaps (&ldquo;You mentioned 500 damaged homes but provided photos for only 120&rdquo;), and drafting impact narratives from structured data.</p>
+
+<p>Evaluated by having emergency managers use the system to recreate 45 historical applications: completion time dropped from 18.3 to 6.7 hours. Required elements included jumped from 78.4% to 96.2%. Estimated approval likelihood went from 72% to 91%.</p>
+
+<p>Improvement was largest for <strong>first-time applicants (+28 percentage points)</strong> and <strong>small jurisdictions under 50,000 population (+24 points)</strong>. The system functions as an experienced FEMA consultant available 24/7&mdash;exactly the resource that under-served communities lack.</p>
+
+<hr>
+
+<h2>The Fairness Results</h2>
+
+<p>Full pipeline results against historical data from 2018-2023 disasters with known outcomes:</p>
+
+<table>
+<thead>
+<tr>
+<th>Demographic Group</th>
+<th>Historical Approval Rate</th>
+<th>AI-Assisted Rate</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>White-majority counties</td>
+<td>78.2%</td>
+<td>76.9%</td>
+<td>-1.3pp</td>
+</tr>
+<tr>
+<td>Minority-majority counties</td>
+<td>69.4%</td>
+<td>74.8%</td>
+<td>+5.4pp</td>
+</tr>
+<tr>
+<td>High income (&gt;$65K median)</td>
+<td>81.3%</td>
+<td>78.1%</td>
+<td>-3.2pp</td>
+</tr>
+<tr>
+<td>Low income (&lt;$45K median)</td>
+<td>71.7%</td>
+<td>76.2%</td>
+<td>+4.5pp</td>
+</tr>
+<tr>
+<td>Urban counties</td>
+<td>79.8%</td>
+<td>77.5%</td>
+<td>-2.3pp</td>
+</tr>
+<tr>
+<td>Rural counties</td>
+<td>68.9%</td>
+<td>75.3%</td>
+<td>+6.4pp</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>The approval gap between minority-majority and white-majority counties shrinks from 8.8 points to 2.1.</strong> Rural-urban gap from 10.9 to 2.2. Low-to-high income from 9.6 to 1.9.</p>
+
+<p>The mechanism is clear: standardized damage assessment reduces subjective bias, and application assistance provides expert-level guidance regardless of local capacity. Communities that previously struggled with documentation quality, not damage severity, see the largest improvements.</p>
+
+<p>This isn&rsquo;t fairness as an afterthought. We tested against three complementary metrics throughout development: demographic parity, equalized odds, and calibration across groups. The constraints were baked into the architecture, not retrofitted. That matters because optimizing purely for accuracy on historical data would have reproduced the historical biases.</p>
+
+<hr>
+
+<h2>Deployment Realities: Where It Actually Gets Hard</h2>
+
+<p>The prototype worked. Getting it into federal government is a different problem entirely.</p>
+
+<p><strong>Explainability isn&rsquo;t optional.</strong> The Administrative Procedure Act, due process requirements, FOIA, and the Stafford Act all impose transparency obligations. Every AI recommendation needs structured, auditable reasoning&mdash;not attention heatmaps, but factor-based explanations a FEMA reviewer (or a congressional oversight committee, or a court) can follow:</p>
+
+<pre><code>{
+  "recommendation": "Approve Individual Assistance",
+  "confidence": 0.87,
+  "key_factors": [
+    {
+      "factor": "Building damage severity exceeds threshold",
+      "weight": 0.32,
+      "evidence": "Satellite analysis: 450 structures severely damaged (&gt;50% destruction)",
+      "source": "stage2_multimodal_assessment"
+    },
+    {
+      "factor": "Local capacity overwhelmed relative to damage scale",
+      "weight": 0.28,
+      "evidence": "County population 45,000, estimated repair costs $120M (267% of annual budget)",
+      "source": "form_010_section_G"
+    }
+  ],
+  "precedent_cases": [
+    {"disaster": "Hurricane Michael 2018 (FL)", "outcome": "Approved", "similarity": 0.91}
+  ],
+  "sensitivity_analysis": {
+    "if_damage_10%_lower": "Still recommend approval (confidence 0.79)",
+    "if_local_capacity_adequate": "Borderline case (confidence 0.52)"
+  }
+}</code></pre>
+
+<p>Factor-based reasoning, evidence attribution, precedent comparison, sensitivity analysis, explicit uncertainty. More work than a confidence score and a saliency map, but non-negotiable in this context.</p>
+
+<p><strong>Data is a mess.</strong> Training data is scattered across regional offices in inconsistent formats. Privacy restrictions limit access to actual disaster victim data. Historical decisions embed past biases. We used synthetic data generation and explicit fairness constraints in training, but synthetic data may not fully capture real-world edge cases&mdash;that&rsquo;s a real limitation.</p>
+
+<p><strong>The organizational problem is the real problem.</strong> FEMA employs experienced professionals who&rsquo;ve processed disaster declarations for years. Their concerns about AI aren&rsquo;t irrational: &ldquo;AI will make mistakes and I&rsquo;ll be held accountable.&rdquo; &ldquo;This is automating me out of my job.&rdquo; &ldquo;I don&rsquo;t understand how it works, so how can I trust it?&rdquo;</p>
+
+<p>Most government AI projects die here&mdash;not on technical merit, but on adoption. What worked in our evaluation: co-designing with end users from the start (30+ interviews with field staff and regional coordinators), framing the system as augmentation that frees staff from paperwork to focus on complex cases, and proposing gradual rollout starting with volunteer regional offices. The IRS learned this the hard way with its modernization efforts. USCIS has hit similar walls with immigration document processing. The pattern is consistent: <strong>organizational readiness matters more than technical capability.</strong></p>
+
+<p>You could argue the co-design process is slow and government should mandate adoption top-down. In practice, that&rsquo;s how you get systems that technically work but operationally fail&mdash;staff find workarounds, trust erodes, and the project gets quietly shelved after the press release. <strong>The slower path is the faster path.</strong></p>
+
+<hr>
+
+<h2>What Deployment Would Actually Look Like</h2>
+
+<p>A realistic rollout: six-month controlled pilot in 3 volunteer FEMA regions processing 500-1,000 applications, with intensive data collection and weekly feedback. Success criteria: 50%+ processing time reduction, 90%+ staff satisfaction, no increase in error rates, measurable fairness improvements. Then third-party evaluation, refinement, and gradual national rollout over 18-24 months.</p>
+
+<p>Total first-year cost estimate: $11.5-16M including development, production infrastructure, training, and change management. Annual benefits: $10-15M in direct cost savings, $50-100M in indirect benefits from faster aid deployment, and the equity improvements that don&rsquo;t reduce to dollar figures but matter most. The ROI math works, though the speed and fairness arguments should be sufficient on their own.</p>
+
+<hr>
+
+<h2>Open Honest Questions</h2>
+
+<p>Some things I don&rsquo;t have clean answers to:</p>
+
+<p><strong>Error tolerance.</strong> The remaining 1.4% critical error rate on form extraction and 6.1% false negative rate on damage assessment aren&rsquo;t zero. In a system processing disaster relief for vulnerable populations, what error rate is acceptable? I&rsquo;d argue it&rsquo;s lower than the current human error rates (8.2% and 11.3% respectively), but &ldquo;better than the status quo&rdquo; is a necessary condition, not a sufficient one.</p>
+
+<p><strong>Agentic maturity.</strong> Agentic systems show clear promise but remain immature for full production. The planning module works well. Execution struggles with truly novel situations outside the training distribution. For disaster response, where novel situations are the whole point, that&rsquo;s a real constraint.</p>
+
+<p><strong>Fairness is underdetermined.</strong> Fairness testing is technically non-trivial. Multiple notions of fairness are sometimes mathematically incompatible. You can&rsquo;t simultaneously achieve demographic parity, equalized odds, and perfect calibration except in degenerate cases. The choices between these metrics aren&rsquo;t technical&mdash;they&rsquo;re value judgments that need democratic input, not just engineering optimization.</p>
+
+<p><strong>Governance lags capability.</strong> Governance frameworks for government AI deployment are still largely nonexistent. Procurement processes don&rsquo;t accommodate iterative AI systems. Accountability structures are unclear when AI contributes to but doesn&rsquo;t make final decisions. The legal landscape is developing in real time.</p>
+
+<hr>
+
+<h2>Why This Matters</h2>
+
+<p>The disaster declaration process is one instance of a pattern that runs through government: high-stakes services that are document-heavy, time-sensitive, inconsistent in outcomes, and structurally biased against vulnerable populations. The same dynamics play out in unemployment insurance, housing assistance, building permits, professional credentialing. The approach generalizes.</p>
+
+<p>&ldquo;AI for public good&rdquo; has become a meaningless phrase. Here it means something specific: current AI can reduce the time families wait for disaster assistance from months to weeks, narrow the gap between communities with grant writers and communities without, and make damage assessments more consistent&mdash;all while keeping humans in the decision loop.</p>
+
+<p>The technology works. The hard part is institutional will, honest monitoring, and treating equity as a constraint rather than an afterthought.</p>
+
+<p>The proof-of-concept works. The next step is a real-world pilot. If you work in disaster response or government AI deployment and want to talk about this, I&rsquo;m reachable.</p>
+
+<hr>
+
+<p><em>This work was completed as part of graduate studies at Columbia University, 2023-2025. Thanks to the emergency management professionals who shared their time and expertise. Views are my own.</em></p>
+
+<hr>
+
+<h2>Things I&rsquo;ve Been Reading</h2>
+
+<ul>
+<li><strong>Selbst et al., &ldquo;Fairness and Abstraction in Sociotechnical Systems&rdquo;</strong> (ACM FAccT, 2019) &mdash; The best articulation of why fairness can&rsquo;t be solved as a purely technical problem. Their &ldquo;abstraction traps&rdquo; framework directly shaped how I thought about deploying in a government context where the sociotechnical system <em>is</em> the product.</li>
+
+<li><strong>Obermeyer et al., &ldquo;Dissecting Racial Bias in an Algorithm Used to Manage the Health of Populations&rdquo;</strong> (Science, 2019) &mdash; The canonical example of how optimizing on a proxy variable (healthcare costs) embeds racial bias. Directly relevant to disaster declarations, where historical approval data reflects documentation capacity, not need.</li>
+
+<li><strong>Barocas, Hardt &amp; Narayanan, <em>Fairness and Machine Learning: Limitations and Opportunities</em></strong> (MIT Press, 2023) &mdash; The textbook treatment of fairness constraints and impossibility results. If you want to understand why you can&rsquo;t simultaneously achieve demographic parity, equalized odds, and calibration, start here.</li>
+
+<li><strong>Xu et al., &ldquo;LayoutLM: Pre-training of Text and Layout for Document Image Understanding&rdquo;</strong> (KDD, 2020) &mdash; The foundational work on treating document layout as a first-class signal for extraction. Our pipeline builds directly on this insight that spatial relationships between fields carry semantic information.</li>
+
+<li><strong>Gupta et al., &ldquo;Creating xBD: A Dataset for Assessing Building Damage from Satellite Imagery&rdquo;</strong> (CVPR Workshops, 2019) &mdash; The dataset that made large-scale disaster damage classification research possible. Our damage assessment stage was fine-tuned on xBD. Worth understanding both its strengths and its geographic/disaster-type biases.</li>
+
+<li><strong>Cass Sunstein, &ldquo;Sludge: What Stops Us from Getting Things Done and What to Do about It&rdquo;</strong> (MIT Press, 2021) &mdash; Sunstein&rsquo;s framework for administrative burden as a policy instrument (deliberate or not) resonates deeply with the FEMA process. The argument that complexity is itself a form of inequity is central to why AI-assisted applications aren&rsquo;t just an efficiency play.</li>
+
+<li><strong>OpenAI, &ldquo;GPT-4 Technical Report&rdquo;</strong> (2023) &mdash; For the vision-language capabilities underpinning Stage 1. The gap between GPT-4&rsquo;s performance on clean benchmarks and messy real-world government forms is where the interesting engineering lives.</li>
+
+<li><strong>AI Now Institute, &ldquo;Confronting Black Boxes: A Shadow Report of the New York City Automated Decision Systems Task Force&rdquo;</strong> (2019) &mdash; A clear-eyed account of what actually happens when governments try to deploy algorithmic decision-making. The institutional and political failure modes they document are more predictive of outcomes than any technical benchmark.</li>
+</ul>
+
+        </div>
+
+        <p class="post-back"><a href="index.html">&larr; back to writing</a></p>
+    </body>
+</html>
