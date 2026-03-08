@@ -1,163 +1,392 @@
-body {
-    padding-left: 200px;
-    padding-top: 100px;
-    width: 600px;
-    color: #4d4d4d;
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* ─── Reset ─── */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
+
+/* ─── Base ─── */
+
+body {
+    font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #222;
+    background-color: #faf9f7;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 80px 24px 60px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Links ─── */
+
 a {
-    color: #4d4d4d;
+    color: #1a5276;
+    text-decoration-color: rgba(26, 82, 118, 0.3);
+    text-underline-offset: 2px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 a:hover {
-    color: #99ffe6;
+    color: #0f3652;
+    text-decoration-color: #0f3652;
 }
+
+/* ─── Headings ─── */
+
 h1 {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 23px;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 500;
-    line-height: 23px;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e0ddd8;
 }
 h1 a {
     text-decoration: none;
+    color: inherit;
 }
-h3 {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 17px;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 500;
-    line-height: 23px;
+h1 a:hover {
+    color: inherit;
 }
-p, ul {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 14px;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 400;
-    line-height: 23px;
-}
-pre {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 11px;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 400;
-    line-height: 23px;
-    background-color: #f5f5f5;
-    border: 1px solid #e0e0e0;
-    padding: 12px 16px;
-    overflow-x: auto;
-}
+
 h2 {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 17px;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 500;
-    line-height: 23px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-top: 36px;
+    margin-bottom: 8px;
 }
+
+h3 {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 32px;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+}
+
+/* ─── Body text ─── */
+
+p, ul, ol {
+    font-size: 15px;
+    line-height: 1.7;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+ul, ol {
+    padding-left: 24px;
+}
+
+/* ─── Images ─── */
+
 img {
     height: auto;
     max-width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
+    border-radius: 4px;
 }
 
-/* Blog post styles */
-.post-title {
-    margin-bottom: 0;
-}
-.post-date {
-    color: #999;
-    font-size: 13px;
-    margin-top: 0;
-}
-.post-back {
-    margin-top: 40px;
-    font-size: 13px;
-}
-.post-content {
-    margin-top: 20px;
-}
-.post-content h2 {
-    margin-top: 30px;
-}
-.post-content h3 {
-    margin-top: 20px;
-}
-.post-content hr {
-    border: none;
-    border-top: 1px solid #ddd;
-    margin: 30px 0;
-}
+/* ─── Blockquote ─── */
 
-/* Blockquote */
 blockquote {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
     font-size: 14px;
-    line-height: 23px;
-    border-left: 3px solid #ccc;
+    line-height: 1.6;
+    border-left: 3px solid #c8c3bb;
+    margin: 20px 0;
     margin-left: 0;
     padding-left: 20px;
-    color: #666;
+    color: #555;
 }
 
-/* Code blocks */
+/* ─── Code ─── */
+
 code {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    font-size: 13px;
+    background-color: #f0eeeb;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+pre {
     font-size: 12px;
-    background-color: #f5f5f5;
-    padding: 2px 4px;
+    line-height: 1.55;
+    background-color: #f0eeeb;
+    border: 1px solid #e0ddd8;
+    padding: 14px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
 }
 pre code {
     padding: 0;
     background-color: transparent;
+    border-radius: 0;
 }
 
-/* Tables */
+/* ─── Tables ─── */
+
 table {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 13px;
+    font-size: 14px;
     border-collapse: collapse;
     width: 100%;
     margin: 20px 0;
 }
 th, td {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #e0ddd8;
     padding: 8px 12px;
     text-align: left;
 }
 th {
-    font-weight: 500;
-    border-bottom: 2px solid #999;
+    font-weight: 600;
+    border-bottom: 2px solid #aaa;
 }
 
-/* Post list */
+/* ─── Horizontal rule ─── */
+
+hr {
+    border: none;
+    border-top: 1px solid #e0ddd8;
+    margin: 32px 0;
+}
+
+/* ─── Section dividers ─── */
+
+.section-divider {
+    border: none;
+    border-top: 1px solid #e0ddd8;
+    margin: 28px 0;
+}
+
+/* ─── Blog post styles ─── */
+
+.post-title {
+    margin-bottom: 0;
+}
+.post-date {
+    color: #888;
+    font-size: 13px;
+    margin-top: 2px;
+}
+.post-back {
+    margin-top: 48px;
+    font-size: 13px;
+}
+.post-content {
+    margin-top: 24px;
+}
+.post-content h2 {
+    margin-top: 36px;
+}
+.post-content h3 {
+    text-transform: none;
+    color: #2d2d2d;
+    margin-top: 24px;
+}
+.post-content hr {
+    border: none;
+    border-top: 1px solid #e0ddd8;
+    margin: 30px 0;
+}
+.post-content strong {
+    font-weight: 600;
+}
+
+/* ─── Post list (writing index) ─── */
+
 .post-list {
     list-style: none;
     padding-left: 0;
+    margin-top: 24px;
 }
 .post-list li {
-    margin-bottom: 16px;
+    margin-bottom: 28px;
 }
 .post-list-date {
-    color: #999;
-    font-size: 13px;
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    display: block;
+    color: #777;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
 }
 .post-list-title {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 14px;
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
 }
 .post-list-title a {
-    color: #4d4d4d;
+    color: #2d2d2d;
+    text-decoration: none;
 }
 .post-list-title a:hover {
-    color: #99ffe6;
+    color: #1a5276;
 }
 
-/* Strong/bold in post content */
-.post-content strong {
-    font-weight: 600;
+/* ─── Homepage ─── */
+
+.site-tagline {
+    font-size: 15px;
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 28px;
+    line-height: 1.7;
+}
+
+.social-links a {
+    margin-right: 12px;
+}
+
+/* ─── Theme toggle ─── */
+
+.theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    z-index: 100;
+}
+.theme-toggle:hover {
+    border-color: #999;
+    color: #333;
+}
+
+/* ─── Dark mode ─── */
+
+[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+[data-theme="dark"] body {
+    color: #d8d5d0;
+    background-color: #1a1a1a;
+}
+
+[data-theme="dark"] a {
+    color: #6dafe0;
+    text-decoration-color: rgba(109, 175, 224, 0.35);
+}
+[data-theme="dark"] a:hover {
+    color: #9cc8ec;
+    text-decoration-color: #9cc8ec;
+}
+
+[data-theme="dark"] h1 {
+    border-bottom-color: #333;
+}
+[data-theme="dark"] h1 a,
+[data-theme="dark"] h1 a:hover {
+    color: inherit;
+}
+
+[data-theme="dark"] h3 {
+    color: #999;
+}
+
+[data-theme="dark"] .site-tagline {
+    color: #aaa;
+}
+
+[data-theme="dark"] code {
+    background-color: #2a2a2a;
+}
+
+[data-theme="dark"] pre {
+    background-color: #2a2a2a;
+    border-color: #333;
+}
+
+[data-theme="dark"] blockquote {
+    border-left-color: #444;
+    color: #aaa;
+}
+
+[data-theme="dark"] th, [data-theme="dark"] td {
+    border-bottom-color: #333;
+}
+[data-theme="dark"] th {
+    border-bottom-color: #555;
+}
+
+[data-theme="dark"] hr,
+[data-theme="dark"] .section-divider {
+    border-top-color: #333;
+}
+
+[data-theme="dark"] .post-date,
+[data-theme="dark"] .post-list-date {
+    color: #888;
+}
+
+[data-theme="dark"] .post-list-title a {
+    color: #d8d5d0;
+}
+[data-theme="dark"] .post-list-title a:hover {
+    color: #6dafe0;
+}
+
+[data-theme="dark"] .post-content h3 {
+    color: #d8d5d0;
+}
+
+[data-theme="dark"] img {
+    opacity: 0.9;
+}
+
+[data-theme="dark"] .theme-toggle {
+    border-color: #555;
+    color: #ccc;
+}
+[data-theme="dark"] .theme-toggle:hover {
+    border-color: #888;
+    color: #fff;
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 700px) {
+    body {
+        padding: 40px 18px 40px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .post-list-title {
+        font-size: 15px;
+    }
+
+    .theme-toggle {
+        top: 12px;
+        right: 12px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
 }

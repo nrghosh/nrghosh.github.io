@@ -6,8 +6,20 @@
     <title>The Offshoring Trap — Nikhil Ghosh</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" href="../resources/favicon.ico">
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 <body>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+    <span id="theme-icon"></span>
+</button>
 
 <h1><a href="../">Nikhil Ghosh</a></h1>
 
@@ -118,9 +130,9 @@
 
 <p>Every one of these mechanisms is weakened by a collective action problem. AI productivity benefits are global (the technology diffuses). Displacement costs are local (concentrated geographically). Countries compete for AI investment, creating a race-to-bottom on worker protections. If the Philippines implements deployment licensing that costs firms 10% of savings, firms credibly threaten relocation to Vietnam.</p>
 
-<p>What currently exists&mdash;OECD principles, UNESCO recommendations, the EU AI Act&mdash;is either non-binding, regional in scope, or unenforceable. What&rsquo;s missing is binding commitments on transition support, harmonized minimum standards, and financing mechanisms for Global South adaptation.</p>
+<p>What currently exists&mdash;OECD principles, UNESCO recommendations, the EU AI Act&mdash;is either non-binding, regional in scope, or unenforceable. What we actually need: binding commitments on transition support, harmonized minimum standards, and financing mechanisms for Global South adaptation.</p>
 
-<p>The most realistic path forward is regional harmonization&mdash;ASEAN countries coordinating on AI labor standards, reducing competitive pressure within the bloc. Multilateral development banks tying lending to transition policies would help too. Neither is fast. Global coordination without a crisis catalyst is unlikely, and the crisis may arrive first.</p>
+<p>The realistic path is regional harmonization&mdash;ASEAN countries coordinating on AI labor standards, reducing competitive pressure within the bloc. Multilateral development banks tying lending to transition policies would help too. Neither is fast. Global coordination without a crisis catalyst is unlikely, and the crisis may get there first.</p>
 
 <h2>What I&rsquo;m Confident About, and What I&rsquo;m Not</h2>
 
@@ -134,7 +146,7 @@
 
 <h2>The Clock</h2>
 
-<p>What&rsquo;s novel about AI as an economic force is the <em>combination</em> of features: faster diffusion than any previous GPT, near-zero marginal costs, cognitive rather than manual task automation, and services rather than manufacturing as the primary locus of disruption. These properties don&rsquo;t fit cleanly into existing analytical frameworks&mdash;not Autor&rsquo;s task model, not Acemoglu-Restrepo&rsquo;s automation theory, not standard trade models of offshoring. We need new theory informed by, but not constrained by, historical patterns.</p>
+<p>What makes AI different as an economic force is the <em>combination</em> of features: faster diffusion than any previous GPT, near-zero marginal costs, cognitive rather than manual task automation, and services rather than manufacturing as the primary locus of disruption. These properties don&rsquo;t fit cleanly into existing analytical frameworks&mdash;not Autor&rsquo;s task model, not Acemoglu-Restrepo&rsquo;s automation theory, not standard trade models of offshoring. We need new theory informed by, but not constrained by, historical patterns.</p>
 
 <p>Can the Global South navigate this without losing a decade of progress? Yes, but it requires acknowledging uncertainty, evidence-based policy, political courage to act before the crisis forces action, and international cooperation where interests align. History says reactive is more common. Economics says proactive is cheaper.</p>
 
@@ -173,6 +185,25 @@
 </div>
 
 <p class="post-back"><a href="index.html">&larr; back to writing</a></p>
+
+<script>
+    function toggleTheme() {
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+        updateIcon();
+    }
+    function updateIcon() {
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.getElementById('theme-icon').textContent = isDark ? '\u2600' : '\u263E';
+    }
+    updateIcon();
+</script>
 
 </body>
 </html>

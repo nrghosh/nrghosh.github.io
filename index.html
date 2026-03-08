@@ -1,47 +1,84 @@
-<html>
-    <head>
-        <link rel="icon" href="resources/favicon.ico"/>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <title>Nikhil Ghosh</title>
-    </head>
-    <body>
-        <h1><a href=''>Nikhil Ghosh</a></h1>
-        <p>
-            Coffee, soccer and Steph Curry enthusiast currently in SF.
-	    Formerly research + grad student-ing (DBs, ML, more) at Columbia.
-	    Prev @ Cloudflare, Apple, and generally hacking around in SF.
-		Large scale compute, data/ML infra, inference serving + optimization.
-            Loves dogs and the Wiggle.
-        </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="resources/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Nikhil Ghosh</title>
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+</head>
+<body>
 
-        <h3>Work</h3>
-        <p>
-            Currently: Engineering + LLMs @ Anyscale.
-		Helped build Workers AI @ Cloudflare. Previously worked on Exascale compute and
-		Search / ML Data Infra at Apple under (but not limited to) Siri Search.
-        </p>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span id="theme-icon"></span>
+    </button>
 
-        <h3>Education</h3>
-        <p>
-            MS CS (ML) @ Columbia, BA CS + Econ @ Wesleyan.
-        </p>
+    <h1><a href="">Nikhil Ghosh</a></h1>
+    <p class="site-tagline">
+        Engineer in SF. Fan of cortados, Man United, and Steph Curry.
+        Loves dogs, the Wiggle, and jazz.
+    </p>
 
-        <h3>Writing</h3>
-        <p>
-        Occasional writing on AI, infrastructure, and policy.
-        See posts <a href="writing/index.html">here</a>.
-        </p>
+    <hr class="section-divider">
 
-        <h3>Personal</h3>
-        <p>
-        I like jazz and <a href="reads.html">reading</a>.
-        </p>
+    <h3>Work</h3>
+    <p>
+        Currently building with LLMs at Anyscale.
+        Previously helped launch Workers AI at Cloudflare, and worked on
+        exascale compute and search / ML data infra at Apple under Siri Search.
+    </p>
 
-        <h3>Social</h3>
-        <p>
-        <a href="https://www.twitter.com/nikhil_r_ghosh">Twitter</a>, <a
-            href="https://www.linkedin.com/in/nikhilghosh">LinkedIn</a>,
-		<a href="https://www.github.com/nrghosh">Github</a>
-        </p>
-    </body>
+    <hr class="section-divider">
+
+    <h3>Writing</h3>
+    <p>Occasional writing on AI, infrastructure, and policy.</p>
+    <ul class="post-list">
+        <li>
+            <span class="post-list-date">May 2025</span>
+            <span class="post-list-title"><a href="writing/ai-global-south-service-economies.html">The Offshoring Trap: Why Service Economies in the Global South Are Maximally Exposed to AI</a></span>
+        </li>
+        <li>
+            <span class="post-list-date">May 2025</span>
+            <span class="post-list-title"><a href="writing/fema-disaster-declarations.html">The 68-Day Wait: Building an AI Pipeline to Fix FEMA Disaster Declarations</a></span>
+        </li>
+    </ul>
+    <p><a href="writing/index.html">All posts &rarr;</a></p>
+
+    <hr class="section-divider">
+
+    <h3>Elsewhere</h3>
+    <p class="social-links">
+        <a href="https://twitter.com/nikhil_r_ghosh">Twitter</a>
+        <a href="https://www.linkedin.com/in/nikhilghosh">LinkedIn</a>
+        <a href="https://www.github.com/nrghosh">GitHub</a>
+    </p>
+
+    <script>
+        function toggleTheme() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateIcon();
+        }
+        function updateIcon() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.getElementById('theme-icon').textContent = isDark ? '\u2600' : '\u263E';
+        }
+        updateIcon();
+    </script>
+
+</body>
 </html>

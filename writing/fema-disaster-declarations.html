@@ -6,8 +6,19 @@
         <link rel="icon" href="../resources/favicon.ico"/>
         <link rel="stylesheet" type="text/css" href="../style.css">
         <title>The 68-Day Wait &mdash; Nikhil Ghosh</title>
+        <script>
+            (function() {
+                var t = localStorage.getItem('theme');
+                if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            })();
+        </script>
     </head>
     <body>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <span id="theme-icon"></span>
+        </button>
         <h1><a href="../">Nikhil Ghosh</a></h1>
 
         <h2 class="post-title">The 68-Day Wait: Building an AI Pipeline to Fix FEMA Disaster Declarations</h2>
@@ -37,9 +48,9 @@
 
 <p>Rural counties, tribal nations, and under-resourced communities? Part-time emergency managers juggling multiple roles, first-time applicants, minimal administrative support. They struggle with complex forms and face substantially longer delays&mdash;not because their need is less, but because their documentation capacity is limited.</p>
 
-<p>The result is systematic approval disparities that reflect documentation quality rather than underlying need. Historical data from 2018-2023 bears this out: minority-majority counties approved at 69.4% vs. 78.2% for white-majority counties. Rural counties at 68.9% vs. 79.8% for urban. Low-income at 71.7% vs. 81.3% for high-income. These gaps aren&rsquo;t about damage severity. <strong>They&rsquo;re about who can fill out the paperwork.</strong></p>
+<p>The result: systematic approval disparities that track documentation quality, not underlying need. Historical data from 2018-2023 bears this out: minority-majority counties approved at 69.4% vs. 78.2% for white-majority counties. Rural counties at 68.9% vs. 79.8% for urban. Low-income at 71.7% vs. 81.3% for high-income. These gaps aren&rsquo;t about damage severity. <strong>They&rsquo;re about who can fill out the paperwork.</strong></p>
 
-<p>You could argue this is just how bureaucracy works&mdash;complex processes inevitably favor the sophisticated. And that&rsquo;s fair as a descriptive claim. But it&rsquo;s not acceptable as a normative one when we&rsquo;re talking about disaster relief. And it turns out AI can actually help close these gaps, not widen them.</p>
+<p>You could argue this is just how bureaucracy works&mdash;complex processes inevitably favor the sophisticated. And that&rsquo;s fair as a descriptive claim. But it&rsquo;s not acceptable as a normative one when we&rsquo;re talking about disaster relief. AI can actually close these gaps, not widen them.</p>
 
 <hr>
 
@@ -134,7 +145,7 @@
 
 <p>The mechanism is clear: standardized damage assessment reduces subjective bias, and application assistance provides expert-level guidance regardless of local capacity. Communities that previously struggled with documentation quality, not damage severity, see the largest improvements.</p>
 
-<p>This isn&rsquo;t fairness as an afterthought. We tested against three complementary metrics throughout development: demographic parity, equalized odds, and calibration across groups. The constraints were baked into the architecture, not retrofitted. That matters because optimizing purely for accuracy on historical data would have reproduced the historical biases.</p>
+<p>Fairness wasn&rsquo;t an afterthought here. We tested against three complementary metrics throughout development: demographic parity, equalized odds, and calibration across groups. The constraints were baked into the architecture, not retrofitted. Optimizing purely for accuracy on historical data would have reproduced the historical biases.</p>
 
 <hr>
 
@@ -190,17 +201,17 @@
 
 <hr>
 
-<h2>Open Honest Questions</h2>
+<h2>Open Questions</h2>
 
 <p>Some things I don&rsquo;t have clean answers to:</p>
 
 <p><strong>Error tolerance.</strong> The remaining 1.4% critical error rate on form extraction and 6.1% false negative rate on damage assessment aren&rsquo;t zero. In a system processing disaster relief for vulnerable populations, what error rate is acceptable? I&rsquo;d argue it&rsquo;s lower than the current human error rates (8.2% and 11.3% respectively), but &ldquo;better than the status quo&rdquo; is a necessary condition, not a sufficient one.</p>
 
-<p><strong>Agentic maturity.</strong> Agentic systems show clear promise but remain immature for full production. The planning module works well. Execution struggles with truly novel situations outside the training distribution. For disaster response, where novel situations are the whole point, that&rsquo;s a real constraint.</p>
+<p><strong>Agentic maturity.</strong> Agentic systems are promising but immature for production. The planning module works well. Execution struggles with truly novel situations outside the training distribution. For disaster response, where novel situations are the whole point, that&rsquo;s a real constraint.</p>
 
 <p><strong>Fairness is underdetermined.</strong> Fairness testing is technically non-trivial. Multiple notions of fairness are sometimes mathematically incompatible. You can&rsquo;t simultaneously achieve demographic parity, equalized odds, and perfect calibration except in degenerate cases. The choices between these metrics aren&rsquo;t technical&mdash;they&rsquo;re value judgments that need democratic input, not just engineering optimization.</p>
 
-<p><strong>Governance lags capability.</strong> Governance frameworks for government AI deployment are still largely nonexistent. Procurement processes don&rsquo;t accommodate iterative AI systems. Accountability structures are unclear when AI contributes to but doesn&rsquo;t make final decisions. The legal landscape is developing in real time.</p>
+<p><strong>Governance lags capability.</strong> Governance frameworks for government AI deployment are still largely nonexistent. Procurement processes don&rsquo;t accommodate iterative AI systems. Accountability structures are unclear when AI contributes to but doesn&rsquo;t make final decisions. The legal picture is developing in real time.</p>
 
 <hr>
 
@@ -212,7 +223,7 @@
 
 <p>The technology works. The hard part is institutional will, honest monitoring, and treating equity as a constraint rather than an afterthought.</p>
 
-<p>The proof-of-concept works. The next step is a real-world pilot. If you work in disaster response or government AI deployment and want to talk about this, I&rsquo;m reachable.</p>
+<p>The proof-of-concept works. The next step is a real pilot. If you work in disaster response or government AI deployment and want to talk about this, reach out.</p>
 
 <hr>
 
@@ -243,5 +254,24 @@
         </div>
 
         <p class="post-back"><a href="index.html">&larr; back to writing</a></p>
+
+        <script>
+            function toggleTheme() {
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                if (isDark) {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+                updateIcon();
+            }
+            function updateIcon() {
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                document.getElementById('theme-icon').textContent = isDark ? '\u2600' : '\u263E';
+            }
+            updateIcon();
+        </script>
     </body>
 </html>
