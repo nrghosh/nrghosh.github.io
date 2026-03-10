@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="../resources/favicon.ico"/>
         <link rel="stylesheet" type="text/css" href="../style.css">
-        <title>The 68-Day Wait &mdash; Nikhil Ghosh</title>
+        <title>Fixing FEMA Isn't Hard, PDF Extraction Still Maybe Is &mdash; Nikhil Ghosh</title>
         <script>
             (function() {
                 var t = localStorage.getItem('theme');
@@ -21,7 +21,7 @@
         </button>
         <h1><a href="../">Nikhil Ghosh</a></h1>
 
-        <h2 class="post-title">The 68-Day Wait: Building an AI Pipeline to Fix FEMA Disaster Declarations</h2>
+        <h2 class="post-title">Fixing FEMA Isn't Hard, PDF Extraction Still Maybe Is</h2>
         <p class="post-date">May 15, 2025</p>
 
         <div class="post-content">
@@ -34,9 +34,9 @@
 
 <p>That gap&mdash;between operational response and bureaucratic resolution&mdash;is where people&rsquo;s lives fall apart. Homeowners face mounting costs with no federal support. Local governments drain emergency reserves. Economic activity flatlines. And the communities hit hardest by the disaster are often the ones least equipped to survive the wait.</p>
 
-<p>The bottleneck isn&rsquo;t funding or political will. <strong>It&rsquo;s document processing.</strong> Hundreds of pages of damage assessments, field reports, and application forms per disaster, all manually reviewed, consolidated, and routed through a multi-step approval chain. Average timeline from disaster to final IA declaration: 45-90 days, based on FEMA administrative data from 2015-2023.</p>
+<p>The bottleneck is document processing — not funding, not political will. Hundreds of pages of damage assessments, field reports, and application forms per disaster, all manually reviewed, consolidated, and routed through a multi-step approval chain. Average timeline from disaster to final IA declaration: 45-90 days, based on FEMA administrative data from 2015-2023.</p>
 
-<p>This is adapted from work I did during grad studies at Columbia (2023-2025)&mdash;a proof-of-concept AI pipeline that attacks this bottleneck directly. The speed gains were expected. The equity gains were the surprise.</p>
+<p>This is adapted from work Aman Choudhri and I did during grad studies at Columbia (2023-2025)&mdash;a proof-of-concept AI pipeline that attacks this bottleneck directly.</p>
 
 <hr>
 
@@ -46,11 +46,11 @@
 
 <p>Well-resourced municipalities (think Miami-Dade, Houston) have dedicated emergency management departments, experienced grant writers, and institutional memory from previous disasters. They document damage comprehensively and navigate FEMA&rsquo;s requirements with practiced ease.</p>
 
-<p>Rural counties, tribal nations, and under-resourced communities? Part-time emergency managers juggling multiple roles, first-time applicants, minimal administrative support. They struggle with complex forms and face substantially longer delays&mdash;not because their need is less, but because their documentation capacity is limited.</p>
+<p>Rural counties, tribal nations, and under-resourced communities don't have that. Part-time emergency managers juggling multiple roles, first-time applicants, minimal administrative support. They struggle with complex forms and face substantially longer delays&mdash;not because their need is less, but because their documentation capacity is limited.</p>
 
 <p>The result: systematic approval disparities that track documentation quality, not underlying need. Historical data from 2018-2023 bears this out: minority-majority counties approved at 69.4% vs. 78.2% for white-majority counties. Rural counties at 68.9% vs. 79.8% for urban. Low-income at 71.7% vs. 81.3% for high-income. These gaps aren&rsquo;t about damage severity. <strong>They&rsquo;re about who can fill out the paperwork.</strong></p>
 
-<p>You could argue this is just how bureaucracy works&mdash;complex processes inevitably favor the sophisticated. And that&rsquo;s fair as a descriptive claim. But it&rsquo;s not acceptable as a normative one when we&rsquo;re talking about disaster relief. AI can actually close these gaps, not widen them.</p>
+<p>You could argue this is just how bureaucracy works — complex processes inevitably favor the sophisticated. Fair enough as a descriptive claim. But it&rsquo;s not acceptable as a normative one when we&rsquo;re talking about disaster relief. AI can actually close these gaps, not widen them.</p>
 
 <hr>
 
@@ -62,11 +62,11 @@
 
 <p>FEMA Form 010-0-13 is 12 pages, 150+ fields, mixing structured data with unstructured narratives. Forms arrive as clean PDFs, scanned images, partially handwritten documents, sometimes water-damaged. Traditional OCR hits 85-90% accuracy on clean scans and degrades from there. Every form gets manual human review. Processing time: 45-60 minutes per form.</p>
 
-<p>The approach: treat the entire form as context for an LLM-based structured extraction. Feed the full form as images plus OCR text plus field schema into GPT-4-Turbo&rsquo;s 128K context window. Layer on cross-field consistency checks, required field verification, and confidence scoring to route only low-confidence extractions to human review.</p>
+<p>Our approach: treat the entire form as context for an LLM-based structured extraction. Feed the full form as images plus OCR text plus field schema into GPT-4-Turbo&rsquo;s 128K context window. Layer on cross-field consistency checks, required field verification, and confidence scoring to route only low-confidence extractions to human review.</p>
 
 <p>On 247 historical de-identified forms: field extraction accuracy jumped from 87.3% to <strong>96.8%</strong>. Processing time dropped from 52 minutes to <strong>3.2 minutes</strong> per form. The share of forms requiring human review fell from 100% to <strong>23%</strong>. Critical field errors dropped from 8.2% to <strong>1.4%</strong>.</p>
 
-<p>The remaining errors cluster around handwritten dollar amounts with ambiguous zeros and borderline damage classifications&mdash;addressable with field-specific fine-tuning and mandatory human verification on high-stakes fields. At FEMA&rsquo;s scale of roughly 20,000 forms annually, this translates to about $520K in direct cost savings, but the real value is time: faster processing means faster declarations.</p>
+<p>The remaining errors cluster around handwritten dollar amounts with ambiguous zeros and borderline damage classifications&mdash;addressable with field-specific fine-tuning and mandatory human verification on high-stakes fields. At FEMA&rsquo;s scale of roughly 20,000 forms annually, this translates to about $520K in direct cost savings, but the real value is time. Faster processing means faster declarations.</p>
 
 <h3>Stage 2: Multimodal Damage Assessment</h3>
 
@@ -80,11 +80,11 @@
 
 <h3>Stage 3: Agentic Application Assistance</h3>
 
-<p>Stage 3 has the most direct equity impact. The system acts as an AI agent that guides applicants through the declaration process&mdash;parsing FEMA requirements, generating disaster-specific checklists, running real-time completeness checks, identifying gaps (&ldquo;You mentioned 500 damaged homes but provided photos for only 120&rdquo;), and drafting impact narratives from structured data.</p>
+<p>Stage 3 has the most direct equity impact. The system acts as an AI agent that guides applicants through the declaration process — it parses FEMA requirements, generates disaster-specific checklists, runs real-time completeness checks, identifies gaps (&ldquo;You mentioned 500 damaged homes but provided photos for only 120&rdquo;), and drafting impact narratives from structured data.</p>
 
-<p>Evaluated by having emergency managers use the system to recreate 45 historical applications: completion time dropped from 18.3 to 6.7 hours. Required elements included jumped from 78.4% to 96.2%. Estimated approval likelihood went from 72% to 91%.</p>
+<p>We evaluated this by having emergency managers use the system to recreate 45 historical applications: completion time dropped from 18.3 to 6.7 hours. Required elements included jumped from 78.4% to 96.2%. Estimated approval likelihood went from 72% to 91%.</p>
 
-<p>Improvement was largest for <strong>first-time applicants (+28 percentage points)</strong> and <strong>small jurisdictions under 50,000 population (+24 points)</strong>. The system functions as an experienced FEMA consultant available 24/7&mdash;exactly the resource that under-served communities lack.</p>
+<p>Improvement was largest for <strong>first-time applicants (+28 percentage points)</strong> and <strong>small jurisdictions under 50,000 population (+24 points)</strong>. In effect, it's an experienced FEMA consultant available 24/7 — exactly the resource that under-served communities lack.</p>
 
 <hr>
 
@@ -143,9 +143,9 @@
 
 <p><strong>The approval gap between minority-majority and white-majority counties shrinks from 8.8 points to 2.1.</strong> Rural-urban gap from 10.9 to 2.2. Low-to-high income from 9.6 to 1.9.</p>
 
-<p>The mechanism is clear: standardized damage assessment reduces subjective bias, and application assistance provides expert-level guidance regardless of local capacity. Communities that previously struggled with documentation quality, not damage severity, see the largest improvements.</p>
+<p>The mechanism is straightforward: standardized damage assessment reduces subjective bias, and application assistance provides expert-level guidance regardless of local capacity. Communities that previously struggled with documentation quality, not damage severity, see the largest improvements.</p>
 
-<p>Fairness wasn&rsquo;t an afterthought here. We tested against three complementary metrics throughout development: demographic parity, equalized odds, and calibration across groups. The constraints were baked into the architecture, not retrofitted. Optimizing purely for accuracy on historical data would have reproduced the historical biases.</p>
+<p>Fairness wasn&rsquo;t an afterthought here. We tested against three complementary metrics throughout development: demographic parity, equalized odds, and calibration across groups. The constraints were baked into the architecture, not retrofitted. Optimizing purely for accuracy on historical data would've just reproduced the historical biases.</p>
 
 <hr>
 
@@ -189,13 +189,13 @@
 
 <p>Most government AI projects die here&mdash;not on technical merit, but on adoption. What worked in our evaluation: co-designing with end users from the start (30+ interviews with field staff and regional coordinators), framing the system as augmentation that frees staff from paperwork to focus on complex cases, and proposing gradual rollout starting with volunteer regional offices. The IRS learned this the hard way with its modernization efforts. USCIS has hit similar walls with immigration document processing. The pattern is consistent: <strong>organizational readiness matters more than technical capability.</strong></p>
 
-<p>You could argue the co-design process is slow and government should mandate adoption top-down. In practice, that&rsquo;s how you get systems that technically work but operationally fail&mdash;staff find workarounds, trust erodes, and the project gets quietly shelved after the press release. <strong>The slower path is the faster path.</strong></p>
+<p>You could argue the co-design process is slow and government should mandate adoption top-down. In practice, that&rsquo;s how you get systems that technically work but operationally fail&mdash;staff find workarounds, trust erodes, and the project gets quietly shelved after the press release. Going slower on adoption is how you actually get adoption.</p>
 
 <hr>
 
 <h2>What Deployment Would Actually Look Like</h2>
 
-<p>A realistic rollout: six-month controlled pilot in 3 volunteer FEMA regions processing 500-1,000 applications, with intensive data collection and weekly feedback. Success criteria: 50%+ processing time reduction, 90%+ staff satisfaction, no increase in error rates, measurable fairness improvements. Then third-party evaluation, refinement, and gradual national rollout over 18-24 months.</p>
+<p>Realistic rollout: six-month controlled pilot in 3 volunteer FEMA regions processing 500-1,000 applications, with intensive data collection and weekly feedback. Success criteria: 50%+ processing time reduction, 90%+ staff satisfaction, no increase in error rates, measurable fairness improvements. Then third-party evaluation, refinement, and gradual national rollout over 18-24 months.</p>
 
 <p>Total first-year cost estimate: $11.5-16M including development, production infrastructure, training, and change management. Annual benefits: $10-15M in direct cost savings, $50-100M in indirect benefits from faster aid deployment, and the equity improvements that don&rsquo;t reduce to dollar figures but matter most. The ROI math works, though the speed and fairness arguments should be sufficient on their own.</p>
 
@@ -217,7 +217,7 @@
 
 <h2>Why This Matters</h2>
 
-<p>The disaster declaration process is one instance of a pattern that runs through government: high-stakes services that are document-heavy, time-sensitive, inconsistent in outcomes, and structurally biased against vulnerable populations. The same dynamics play out in unemployment insurance, housing assistance, building permits, professional credentialing. The approach generalizes.</p>
+<p>The disaster declaration process is one instance of a pattern that runs through government: high-stakes services that are document-heavy, time-sensitive, inconsistent in outcomes, and structurally biased against vulnerable populations. The same dynamics play out in things like unemployment insurance, housing assistance, building permits, professional credentialing. The approach generalizes.</p>
 
 <p>&ldquo;AI for public good&rdquo; has become a meaningless phrase. Here it means something specific: current AI can reduce the time families wait for disaster assistance from months to weeks, narrow the gap between communities with grant writers and communities without, and make damage assessments more consistent&mdash;all while keeping humans in the decision loop.</p>
 
@@ -227,7 +227,7 @@
 
 <hr>
 
-<p><em>This work was completed as part of graduate studies at Columbia University, 2023-2025. Thanks to the emergency management professionals who shared their time and expertise. Views are my own.</em></p>
+<p><em>This work was completed as part of graduate studies at Columbia University, 2023-2025. Thanks to Jeff Schlegelmilch at the National Center for Disaster Preparedness for domain expertise and guidance, to our advisors Eugene Wu and Kostis Kaffes in Columbia CS, and to Shreya Shankar at UC Berkeley for DocETL. Thanks also to the emergency management professionals who shared their time and expertise. Views are our own.</em></p>
 
 <hr>
 
